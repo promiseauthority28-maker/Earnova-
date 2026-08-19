@@ -3,61 +3,464 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <title>Promise Task</title>
+
+  <title>Earnova</title>
+
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#17202a}
-    .app{max-width:520px;margin:auto;padding:18px}
-    .hero{background:#111827;color:white;border-radius:22px;padding:22px;margin-bottom:16px}
-    .small{opacity:.75;font-size:13px}.balance{font-size:32px;font-weight:700;margin:8px 0 18px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .card{background:white;border-radius:18px;padding:18px;box-shadow:0 2px 10px #0000000d}
-    .icon{font-size:25px}.title{font-weight:700;margin-top:8px}.muted{color:#68707a;font-size:13px;margin-top:5px}
-    button{width:100%;border:0;border-radius:14px;padding:14px;font-size:15px;font-weight:700;background:#2563eb;color:white;margin-top:15px}
-    .section{margin:20px 0 10px;font-size:18px;font-weight:700}
-    #tgname{font-weight:700}
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #17202a;
+    }
+
+    .app {
+      max-width: 520px;
+      margin: auto;
+      padding: 18px;
+    }
+
+    .hero {
+      background: #111827;
+      color: white;
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+
+    .small {
+      opacity: .75;
+      font-size: 13px;
+    }
+
+    .balance {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 8px 0 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 2px 10px #0000000d;
+    }
+
+    .clickable {
+      cursor: pointer;
+    }
+
+    .icon {
+      font-size: 25px;
+    }
+
+    .title {
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .muted {
+      color: #68707a;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      background: #2563eb;
+      color: white;
+      margin-top: 15px;
+    }
+
+    .section {
+      margin: 20px 0 10px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .task {
+      margin-bottom: 12px;
+    }
+
+    .reward {
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .back {
+      background: #6b7280;
+    }
+
+    .notice {
+      padding: 14px;
+      background: #fff;
+      border-radius: 14px;
+      margin-top: 12px;
+      color: #555;
+      text-align: center;
+    }
   </style>
 </head>
+
 <body>
+
 <div class="app">
-  <div class="hero">
-    <div class="small">WELCOME</div>
-    <div id="tgname">Promise Task User</div>
-    <div class="small" style="margin-top:18px">Available Balance</div>
-    <div class="balance">₦0.00</div>
-    <button onclick="showNotice('Wallet will be connected after the backend is added.')">Open Wallet</button>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+
+    <div class="hero">
+      <div class="small">WELCOME</div>
+
+      <div id="tgname">Earnova User</div>
+
+      <div class="small" style="margin-top:18px">
+        Available Balance
+      </div>
+
+      <div class="balance" id="balance">
+        ₦0.00
+      </div>
+
+      <button onclick="showTasks()">
+        📋 Open Tasks
+      </button>
+    </div>
+
+    <div class="section">
+      Quick Menu
+    </div>
+
+    <div class="grid">
+
+      <div class="card clickable" onclick="showTasks()">
+        <div class="icon">📋</div>
+        <div class="title">Tasks</div>
+        <div class="muted">Available tasks</div>
+      </div>
+
+      <div class="card clickable" onclick="showNotice('Account activation will be connected next.')">
+        <div class="icon">⭐</div>
+        <div class="title">My Plan</div>
+        <div class="muted">Activation & plan</div>
+      </div>
+
+      <div class="card clickable" onclick="showNotice('Referral system will be connected next.')">
+        <div class="icon">👥</div>
+        <div class="title">Referrals</div>
+        <div class="muted">Invite & earn</div>
+      </div>
+
+      <div class="card clickable" onclick="showNotice('Withdrawal system will be connected next.')">
+        <div class="icon">💸</div>
+        <div class="title">Withdraw</div>
+        <div class="muted">Request payout</div>
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="section">Quick Menu</div>
-  <div class="grid">
-    <div class="card" onclick="showNotice('Tasks module coming next.')"><div class="icon">📋</div><div class="title">Tasks</div><div class="muted">Available tasks</div></div>
-    <div class="card" onclick="showNotice('Plans module coming next.')"><div class="icon">⭐</div><div class="title">My Plan</div><div class="muted">Activation & plan</div></div>
-    <div class="card" onclick="showNotice('Referral module coming next.')"><div class="icon">👥</div><div class="title">Referrals</div><div class="muted">Invite & earn</div></div>
-    <div class="card" onclick="showNotice('Withdrawal module coming next.')"><div class="icon">💸</div><div class="title">Withdraw</div><div class="muted">Request payout</div></div>
+
+  <!-- TASKS -->
+  <div id="tasksPage" class="hidden">
+
+    <div class="section">
+      📋 Available Tasks
+    </div>
+
+    <button class="back" onclick="showDashboard()">
+      ← Back to Dashboard
+    </button>
+
+    <div id="taskList">
+      <div class="notice">
+        Loading tasks...
+      </div>
+    </div>
+
   </div>
 
-  <div class="section">Account</div>
-  <div class="card">
-    <div class="title">Telegram Account</div>
-    <div class="muted">This first version reads your Telegram profile when opened inside Telegram.</div>
-  </div>
 </div>
 
+
 <script>
-const tg = window.Telegram?.WebApp;
-if (tg) {
-  tg.ready();
-  tg.expand();
-  const user = tg.initDataUnsafe?.user;
-  if (user) {
-    const name = [user.first_name, user.last_name].filter(Boolean).join(' ');
-    document.getElementById('tgname').textContent = name || ('@' + (user.username || 'User'));
+
+  /* ==============================
+     SUPABASE CONNECTION
+  ============================== */
+
+  const SUPABASE_URL =
+    "https://hogdsvkoaafxooweocqd.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_PQG3djS9yqyBkzTEHdyzfg_VKlCna_K";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  /* ==============================
+     TELEGRAM
+  ============================== */
+
+  const tg = window.Telegram?.WebApp;
+
+  let telegramUser = null;
+
+  if (tg) {
+
+    tg.ready();
+    tg.expand();
+
+    telegramUser =
+      tg.initDataUnsafe?.user || null;
+
+    if (telegramUser) {
+
+      const name =
+        [
+          telegramUser.first_name,
+          telegramUser.last_name
+        ]
+        .filter(Boolean)
+        .join(" ");
+
+      document.getElementById("tgname").textContent =
+        name ||
+        ("@" + (telegramUser.username || "User"));
+
+    }
+
   }
-}
-function showNotice(message){
-  if (tg && tg.showAlert) tg.showAlert(message);
-  else alert(message);
-}
+
+
+  /* ==============================
+     SHOW DASHBOARD
+  ============================== */
+
+  function showDashboard() {
+
+    document
+      .getElementById("dashboard")
+      .classList.remove("hidden");
+
+    document
+      .getElementById("tasksPage")
+      .classList.add("hidden");
+
+  }
+
+
+  /* ==============================
+     SHOW TASKS
+  ============================== */
+
+  async function showTasks() {
+
+    document
+      .getElementById("dashboard")
+      .classList.add("hidden");
+
+    document
+      .getElementById("tasksPage")
+      .classList.remove("hidden");
+
+    await loadTasks();
+
+  }
+
+
+  /* ==============================
+     LOAD TASKS FROM SUPABASE
+  ============================== */
+
+  async function loadTasks() {
+
+    const taskList =
+      document.getElementById("taskList");
+
+    taskList.innerHTML =
+      '<div class="notice">Loading tasks...</div>';
+
+    const { data, error } =
+      await supabaseClient
+        .from("tasks")
+        .select("*")
+        .eq("active", true)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+
+      console.error(error);
+
+      taskList.innerHTML =
+        '<div class="notice">Unable to load tasks. Please try again.</div>';
+
+      return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+      taskList.innerHTML =
+        '<div class="notice">No tasks are available right now.</div>';
+
+      return;
+    }
+
+
+    taskList.innerHTML = "";
+
+
+    data.forEach(task => {
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "card task";
+
+
+      card.innerHTML = `
+
+        <div class="icon">
+          📋
+        </div>
+
+        <div class="title">
+          ${escapeHtml(task.title)}
+        </div>
+
+        <div class="muted">
+          ${escapeHtml(task.description || "")}
+        </div>
+
+        <div class="reward">
+          Reward: ₦${Number(task.reward).toFixed(2)}
+        </div>
+
+        <button onclick="openTask('${task.id}')">
+          Open Task
+        </button>
+
+      `;
+
+      taskList.appendChild(card);
+
+    });
+
+  }
+
+
+  /* ==============================
+     OPEN TASK
+  ============================== */
+
+  async function openTask(taskId) {
+
+    const { data, error } =
+      await supabaseClient
+        .from("tasks")
+        .select("*")
+        .eq("id", taskId)
+        .single();
+
+    if (error || !data) {
+
+      showNotice("Task could not be found.");
+
+      return;
+    }
+
+
+    if (data.target_url) {
+
+      if (tg && tg.openLink) {
+
+        tg.openLink(data.target_url);
+
+      } else {
+
+        window.open(
+          data.target_url,
+          "_blank"
+        );
+
+      }
+
+    }
+
+  }
+
+
+  /* ==============================
+     NOTICE
+  ============================== */
+
+  function showNotice(message) {
+
+    if (tg && tg.showAlert) {
+
+      tg.showAlert(message);
+
+    } else {
+
+      alert(message);
+
+    }
+
+  }
+
+
+  /* ==============================
+     SAFE TEXT
+  ============================== */
+
+  function escapeHtml(text) {
+
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  /* ==============================
+     START
+  ============================== */
+
+  showDashboard();
+
 </script>
+
 </body>
-</html>
+  </html>
