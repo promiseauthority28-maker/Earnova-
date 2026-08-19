@@ -1,466 +1,1618 @@
-<!doctype html>
+      .<!doctype html>
 <html lang="en">
+
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1"
+  >
 
   <title>Earnova</title>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
   <style>
+
     * {
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #17202a;
+
+      min-height: 100vh;
+
+      font-family:
+        Arial,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at top right,
+          #29345f 0%,
+          transparent 35%
+        ),
+        linear-gradient(
+          180deg,
+          #0b1020 0%,
+          #111827 100%
+        );
+
+      color: #ffffff;
+
     }
 
-    .app {
-      max-width: 520px;
-      margin: auto;
-      padding: 18px;
-    }
-
-    .hero {
-      background: #111827;
-      color: white;
-      border-radius: 22px;
-      padding: 22px;
-      margin-bottom: 16px;
-    }
-
-    .small {
-      opacity: .75;
-      font-size: 13px;
-    }
-
-    .balance {
-      font-size: 32px;
-      font-weight: 700;
-      margin: 8px 0 18px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 2px 10px #0000000d;
-    }
-
-    .clickable {
-      cursor: pointer;
-    }
-
-    .icon {
-      font-size: 25px;
-    }
-
-    .title {
-      font-weight: 700;
-      margin-top: 8px;
-    }
-
-    .muted {
-      color: #68707a;
-      font-size: 13px;
-      margin-top: 5px;
-    }
 
     button {
-      width: 100%;
+
       border: 0;
-      border-radius: 14px;
-      padding: 14px;
+
+      cursor: pointer;
+
+      font-family: inherit;
+
+    }
+
+
+    .app {
+
+      width: 100%;
+
+      max-width: 560px;
+
+      margin: auto;
+
+      padding: 16px;
+
+      padding-bottom: 100px;
+
+    }
+
+
+    /* =========================
+       TOP BAR
+    ========================= */
+
+    .topbar {
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .logo {
+
+      font-size: 22px;
+
+      font-weight: 900;
+
+      letter-spacing: -.5px;
+
+    }
+
+
+    .logo span {
+
+      opacity: .5;
+
+    }
+
+
+    .avatar {
+
+      width: 42px;
+
+      height: 42px;
+
+      border-radius: 50%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background:
+        rgba(255,255,255,.09);
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      font-size: 19px;
+
+    }
+
+
+    /* =========================
+       PAGES
+    ========================= */
+
+    .page {
+
+      display: none;
+
+    }
+
+
+    .page.active {
+
+      display: block;
+
+    }
+
+
+    /* =========================
+       WELCOME
+    ========================= */
+
+    .welcome {
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .welcome .small {
+
+      color:
+        rgba(255,255,255,.55);
+
+      font-size: 12px;
+
+      text-transform:
+        uppercase;
+
+      letter-spacing: 1px;
+
+    }
+
+
+    .welcome h2 {
+
+      margin:
+        5px 0 4px;
+
+      font-size: 25px;
+
+    }
+
+
+    .welcome p {
+
+      margin: 0;
+
+      color:
+        rgba(255,255,255,.55);
+
+      font-size: 13px;
+
+    }
+
+
+    /* =========================
+       BALANCE
+    ========================= */
+
+    .balance-card {
+
+      padding: 22px;
+
+      border-radius: 24px;
+
+      margin-bottom: 14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #29345b,
+          #171d32
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      box-shadow:
+        0 15px 35px
+        rgba(0,0,0,.25);
+
+    }
+
+
+    .balance-label {
+
+      color:
+        rgba(255,255,255,.58);
+
+      font-size: 13px;
+
+    }
+
+
+    .balance {
+
+      margin:
+        6px 0 17px;
+
+      font-size: 34px;
+
+      font-weight: 900;
+
+    }
+
+
+    .balance-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 10px;
+
+    }
+
+
+    .balance-mini {
+
+      padding: 13px;
+
+      border-radius: 15px;
+
+      background:
+        rgba(255,255,255,.07);
+
+    }
+
+
+    .balance-mini .label {
+
+      color:
+        rgba(255,255,255,.55);
+
+      font-size: 11px;
+
+    }
+
+
+    .balance-mini .value {
+
+      margin-top: 5px;
+
       font-size: 15px;
-      font-weight: 700;
-      background: #2563eb;
-      color: white;
-      margin-top: 15px;
+
+      font-weight: 800;
+
     }
 
-    .section {
-      margin: 20px 0 10px;
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .primary-button {
+
+      width: 100%;
+
+      padding: 14px;
+
+      border-radius: 14px;
+
+      background: #ffffff;
+
+      color: #111827;
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+    }
+
+
+    .secondary-button {
+
+      width: 100%;
+
+      padding: 14px;
+
+      border-radius: 14px;
+
+      background:
+        rgba(255,255,255,.08);
+
+      color: #ffffff;
+
+      font-size: 14px;
+
+      font-weight: 800;
+
+    }
+
+
+    .back-button {
+
+      margin-bottom: 14px;
+
+    }
+
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 11px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .stat {
+
+      padding: 16px;
+
+      border-radius: 18px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    }
+
+
+    .stat-icon {
+
+      font-size: 21px;
+
+      margin-bottom: 7px;
+
+    }
+
+
+    .stat-label {
+
+      color:
+        rgba(255,255,255,.52);
+
+      font-size: 12px;
+
+    }
+
+
+    .stat-value {
+
+      margin-top: 4px;
+
+      font-size: 19px;
+
+      font-weight: 900;
+
+    }
+
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    .section-title {
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
+      margin:
+        22px 0 11px;
+
       font-size: 18px;
-      font-weight: 700;
+
+      font-weight: 900;
+
     }
 
-    .task {
-      margin-bottom: 12px;
+
+    .muted {
+
+      color:
+        rgba(255,255,255,.55);
+
+      font-size: 13px;
+
+      line-height: 1.5;
+
     }
+
+
+    /* =========================
+       QUICK MENU
+    ========================= */
+
+    .grid {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 11px;
+
+    }
+
+
+    .card {
+
+      padding: 17px;
+
+      border-radius: 19px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid
+        rgba(255,255,255,.065);
+
+    }
+
+
+    .clickable {
+
+      cursor: pointer;
+
+    }
+
+
+    .icon {
+
+      font-size: 24px;
+
+    }
+
+
+    .title {
+
+      margin-top: 8px;
+
+      font-weight: 900;
+
+      font-size: 15px;
+
+    }
+
+
+    /* =========================
+       PROMOTION
+    ========================= */
+
+    .promotion-banner {
+
+      padding: 20px;
+
+      border-radius: 21px;
+
+      margin-bottom: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #26325a,
+          #171d32
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    }
+
+
+    .promotion-banner h3 {
+
+      margin:
+        0 0 7px;
+
+      font-size: 20px;
+
+    }
+
+
+    .promotion-banner p {
+
+      margin: 0;
+
+      color:
+        rgba(255,255,255,.6);
+
+      font-size: 13px;
+
+      line-height: 1.5;
+
+    }
+
+
+    .promotion-card {
+
+      padding: 17px;
+
+      border-radius: 19px;
+
+      margin-bottom: 11px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid
+        rgba(255,255,255,.065);
+
+    }
+
+
+    .promotion-head {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+    }
+
+
+    .promotion-icon {
+
+      width: 46px;
+
+      height: 46px;
+
+      border-radius: 14px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background:
+        rgba(255,255,255,.08);
+
+      font-size: 21px;
+
+    }
+
+
+    .promotion-title {
+
+      font-size: 15px;
+
+      font-weight: 900;
+
+    }
+
 
     .reward {
-      font-weight: 700;
+
+      display: inline-block;
+
+      margin-top: 12px;
+
+      padding: 6px 10px;
+
+      border-radius: 9px;
+
+      background:
+        rgba(255,255,255,.08);
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =========================
+       TASK
+    ========================= */
+
+    .task {
+
+      margin-bottom: 12px;
+
+    }
+
+
+    .task .reward {
+
       margin-top: 10px;
+
     }
 
-    .hidden {
-      display: none;
+
+    /* =========================
+       REFERRAL
+    ========================= */
+
+    .referral-box {
+
+      padding: 19px;
+
+      border-radius: 20px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid
+        rgba(255,255,255,.06);
+
     }
 
-    .back {
-      background: #6b7280;
+
+    .referral-link {
+
+      margin-top: 14px;
+
+      padding: 12px;
+
+      border-radius: 12px;
+
+      background:
+        rgba(0,0,0,.22);
+
+      color:
+        rgba(255,255,255,.6);
+
+      font-size: 12px;
+
+      word-break: break-all;
+
     }
+
+
+    /* =========================
+       PROFILE
+    ========================= */
+
+    .profile-card {
+
+      padding: 20px;
+
+      border-radius: 20px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    }
+
+
+    .profile-row {
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      padding:
+        13px 0;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+
+    }
+
+
+    .profile-row:last-child {
+
+      border-bottom: 0;
+
+    }
+
+
+    .profile-label {
+
+      color:
+        rgba(255,255,255,.5);
+
+      font-size: 13px;
+
+    }
+
+
+    .profile-value {
+
+      max-width: 55%;
+
+      text-align: right;
+
+      word-break: break-word;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =========================
+       NOTICE
+    ========================= */
 
     .notice {
-      padding: 14px;
-      background: #fff;
-      border-radius: 14px;
-      margin-top: 12px;
-      color: #555;
+
+      padding: 16px;
+
+      border-radius: 15px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      color:
+        rgba(255,255,255,.6);
+
       text-align: center;
+
+      font-size: 13px;
+
     }
+
+
+    /* =========================
+       BOTTOM NAVIGATION
+    ========================= */
+
+    .bottom-nav {
+
+      position: fixed;
+
+      z-index: 999;
+
+      left: 0;
+
+      right: 0;
+
+      bottom: 0;
+
+      height: 70px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content:
+        space-around;
+
+      background:
+        rgba(10,13,24,.96);
+
+      backdrop-filter:
+        blur(15px);
+
+      border-top:
+        1px solid
+        rgba(255,255,255,.08);
+
+    }
+
+
+    .nav-item {
+
+      min-width: 55px;
+
+      text-align: center;
+
+      color:
+        rgba(255,255,255,.5);
+
+      font-size: 10px;
+
+      cursor: pointer;
+
+    }
+
+
+    .nav-item.active {
+
+      color: #ffffff;
+
+      font-weight: 900;
+
+    }
+
+
+    .nav-icon {
+
+      display: block;
+
+      margin-bottom: 3px;
+
+      font-size: 20px;
+
+    }
+
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
-  <!-- DASHBOARD -->
-  <div id="dashboard">
 
-    <div class="hero">
-      <div class="small">WELCOME</div>
+  <!-- =========================
+       HOME
+  ========================= -->
 
-      <div id="tgname">Earnova User</div>
+  <div
+    id="homePage"
+    class="page active"
+  >
 
-      <div class="small" style="margin-top:18px">
+    <div class="topbar">
+
+      <div class="logo">
+        Earnova<span> Rewards</span>
+      </div>
+
+      <div class="avatar">
+        👤
+      </div>
+
+    </div>
+
+
+    <div class="welcome">
+
+      <div class="small">
+        WELCOME
+      </div>
+
+      <h2 id="tgname">
+        Earnova User
+      </h2>
+
+      <p>
+        Complete tasks and promotions
+        to earn rewards.
+      </p>
+
+    </div>
+
+
+    <div class="balance-card">
+
+      <div class="balance-label">
         Available Balance
       </div>
 
-      <div class="balance" id="balance">
+      <div
+        class="balance"
+        id="balance"
+      >
         ₦0.00
       </div>
 
-      <button onclick="showTasks()">
-        📋 Open Tasks
-      </button>
+
+      <div class="balance-grid">
+
+        <div class="balance-mini">
+
+          <div class="label">
+            Referral Balance
+          </div>
+
+          <div
+            class="value"
+            id="referralBalance"
+          >
+            ₦0.00
+          </div>
+
+        </div>
+
+
+        <div class="balance-mini">
+
+          <div class="label">
+            Total Earned
+          </div>
+
+          <div
+            class="value"
+            id="totalEarned"
+          >
+            ₦0.00
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="section">
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          🎯
+        </div>
+
+        <div class="stat-label">
+          Tasks
+        </div>
+
+        <div
+          class="stat-value"
+          id="taskCount"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          👥
+        </div>
+
+        <div class="stat-label">
+          Referrals
+        </div>
+
+        <div
+          class="stat-value"
+          id="referralCount"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          ⭐
+        </div>
+
+        <div class="stat-label">
+          XP
+        </div>
+
+        <div
+          class="stat-value"
+          id="xpValue"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          🏆
+        </div>
+
+        <div class="stat-label">
+          Level
+        </div>
+
+        <div
+          class="stat-value"
+          id="levelValue"
+        >
+          1
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
       Quick Menu
     </div>
 
+
     <div class="grid">
 
-      <div class="card clickable" onclick="showTasks()">
-        <div class="icon">📋</div>
-        <div class="title">Tasks</div>
-        <div class="muted">Available tasks</div>
-      </div>
 
-      <div class="card clickable" onclick="showNotice('Account activation will be connected next.')">
-        <div class="icon">⭐</div>
-        <div class="title">My Plan</div>
-        <div class="muted">Activation & plan</div>
-      </div>
-
-      <div class="card clickable" onclick="showNotice('Referral system will be connected next.')">
-        <div class="icon">👥</div>
-        <div class="title">Referrals</div>
-        <div class="muted">Invite & earn</div>
-      </div>
-
-      <div class="card clickable" onclick="showNotice('Withdrawal system will be connected next.')">
-        <div class="icon">💸</div>
-        <div class="title">Withdraw</div>
-        <div class="muted">Request payout</div>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- TASKS -->
-  <div id="tasksPage" class="hidden">
-
-    <div class="section">
-      📋 Available Tasks
-    </div>
-
-    <button class="back" onclick="showDashboard()">
-      ← Back to Dashboard
-    </button>
-
-    <div id="taskList">
-      <div class="notice">
-        Loading tasks...
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-
-<script>
-
-  /* ==============================
-     SUPABASE CONNECTION
-  ============================== */
-
-  const SUPABASE_URL =
-    "https://hogdsvkoaafxooweocqd.supabase.co";
-
-  const SUPABASE_KEY =
-    "sb_publishable_PQG3djS9yqyBkzTEHdyzfg_VKlCna_K";
-
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-
-
-  /* ==============================
-     TELEGRAM
-  ============================== */
-
-  const tg = window.Telegram?.WebApp;
-
-  let telegramUser = null;
-
-  if (tg) {
-
-    tg.ready();
-    tg.expand();
-
-    telegramUser =
-      tg.initDataUnsafe?.user || null;
-
-    if (telegramUser) {
-
-      const name =
-        [
-          telegramUser.first_name,
-          telegramUser.last_name
-        ]
-        .filter(Boolean)
-        .join(" ");
-
-      document.getElementById("tgname").textContent =
-        name ||
-        ("@" + (telegramUser.username || "User"));
-
-    }
-
-  }
-
-
-  /* ==============================
-     SHOW DASHBOARD
-  ============================== */
-
-  function showDashboard() {
-
-    document
-      .getElementById("dashboard")
-      .classList.remove("hidden");
-
-    document
-      .getElementById("tasksPage")
-      .classList.add("hidden");
-
-  }
-
-
-  /* ==============================
-     SHOW TASKS
-  ============================== */
-
-  async function showTasks() {
-
-    document
-      .getElementById("dashboard")
-      .classList.add("hidden");
-
-    document
-      .getElementById("tasksPage")
-      .classList.remove("hidden");
-
-    await loadTasks();
-
-  }
-
-
-  /* ==============================
-     LOAD TASKS FROM SUPABASE
-  ============================== */
-
-  async function loadTasks() {
-
-    const taskList =
-      document.getElementById("taskList");
-
-    taskList.innerHTML =
-      '<div class="notice">Loading tasks...</div>';
-
-    const { data, error } =
-      await supabaseClient
-        .from("tasks")
-        .select("*")
-        .eq("active", true)
-        .order("created_at", { ascending: false });
-
-    if (error) {
-
-      console.error(error);
-
-      taskList.innerHTML =
-        '<div class="notice">Unable to load tasks. Please try again.</div>';
-
-      return;
-    }
-
-
-    if (!data || data.length === 0) {
-
-      taskList.innerHTML =
-        '<div class="notice">No tasks are available right now.</div>';
-
-      return;
-    }
-
-
-    taskList.innerHTML = "";
-
-
-    data.forEach(task => {
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "card task";
-
-
-      card.innerHTML = `
+      <div
+        class="card clickable"
+        onclick="showTasks()"
+      >
 
         <div class="icon">
           📋
         </div>
 
         <div class="title">
-          ${escapeHtml(task.title)}
+          Tasks
         </div>
 
         <div class="muted">
-          ${escapeHtml(task.description || "")}
+          Complete tasks and earn
+        </div>
+
+      </div>
+
+
+      <div
+        class="card clickable"
+        onclick="showPage('promotionPage')"
+      >
+
+        <div class="icon">
+          📢
+        </div>
+
+        <div class="title">
+          Promotion
+        </div>
+
+        <div class="muted">
+          Promote & earn rewards
+        </div>
+
+      </div>
+
+
+      <div
+        class="card clickable"
+        onclick="showPage('referralPage')"
+      >
+
+        <div class="icon">
+          👥
+        </div>
+
+        <div class="title">
+          Referrals
+        </div>
+
+        <div class="muted">
+          Invite friends & earn
+        </div>
+
+      </div>
+
+
+      <div
+        class="card clickable"
+        onclick="showPage('walletPage')"
+      >
+
+        <div class="icon">
+          💸
+        </div>
+
+        <div class="title">
+          Wallet
+        </div>
+
+        <div class="muted">
+          Balance & withdrawals
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       TASKS
+  ========================= -->
+
+  <div
+    id="tasksPage"
+    class="page"
+  >
+
+    <div class="topbar">
+
+      <div class="logo">
+        Tasks
+      </div>
+
+      <div
+        class="avatar"
+        onclick="showPage('homePage')"
+      >
+        🏠
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      📋 Available Tasks
+    </div>
+
+
+    <div
+      id="taskList"
+    >
+
+      <div class="notice">
+        Loading tasks...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       PROMOTION
+  ========================= -->
+
+  <div
+    id="promotionPage"
+    class="page"
+  >
+
+    <div class="topbar">
+
+      <div class="logo">
+        Promotions
+      </div>
+
+      <div
+        class="avatar"
+        onclick="showPage('homePage')"
+      >
+        🏠
+      </div>
+
+    </div>
+
+
+    <div class="promotion-banner">
+
+      <h3>
+        Promote & Earn 🚀
+      </h3>
+
+      <p>
+        Complete promotional campaigns,
+        help brands grow and earn rewards.
+      </p>
+
+    </div>
+
+
+    <div class="section-title">
+      📢 Available Promotions
+    </div>
+
+
+    <div
+      id="promotionList"
+    >
+
+      <div class="promotion-card">
+
+        <div class="promotion-head">
+
+          <div class="promotion-icon">
+            📢
+          </div>
+
+          <div>
+
+            <div class="promotion-title">
+              Promotion Campaigns
+            </div>
+
+            <div class="muted">
+              New campaigns will appear here.
+            </div>
+
+          </div>
+
         </div>
 
         <div class="reward">
-          Reward: ₦${Number(task.reward).toFixed(2)}
+          Earn rewards
         </div>
 
-        <button onclick="openTask('${task.id}')">
-          Open Task
-        </button>
+      </div>
 
-      `;
+    </div>
 
-      taskList.appendChild(card);
-
-    });
-
-  }
+  </div>
 
 
-  /* ==============================
-     OPEN TASK
-  ============================== */
+  <!-- =========================
+       REFERRALS
+  ========================= -->
 
-  async function openTask(taskId) {
+  <div
+    id="referralPage"
+    class="page"
+  >
 
-    const { data, error } =
-      await supabaseClient
-        .from("tasks")
-        .select("*")
-        .eq("id", taskId)
-        .single();
+    <div class="topbar">
 
-    if (error || !data) {
+      <div class="logo">
+        Referrals
+      </div>
 
-      showNotice("Task could not be found.");
+      <div
+        class="avatar"
+        onclick="showPage('homePage')"
+      >
+        🏠
+      </div>
 
-      return;
-    }
-
-
-    if (data.target_url) {
-
-      if (tg && tg.openLink) {
-
-        tg.openLink(data.target_url);
-
-      } else {
-
-        window.open(
-          data.target_url,
-          "_blank"
-        );
-
-      }
-
-    }
-
-  }
+    </div>
 
 
-  /* ==============================
-     NOTICE
-  ============================== */
-
-  function showNotice(message) {
-
-    if (tg && tg.showAlert) {
-
-      tg.showAlert(message);
-
-    } else {
-
-      alert(message);
-
-    }
-
-  }
+    <div class="section-title">
+      👥 Invite & Earn
+    </div>
 
 
-  /* ==============================
-     SAFE TEXT
-  ============================== */
+    <div class="referral-box">
 
-  function escapeHtml(text) {
+      <h3>
+        Earn with referrals
+      </h3>
 
-    return String(text)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
+      <div class="muted">
+        Invite friends to Earnova and
+        receive referral rewards.
+      </div>
 
 
-  /* ==============================
-     START
-  ============================== */
+      <div
+        class="referral-link"
+        id="referralLink"
+      >
+        Generating your link...
+      </div>
 
-  showDashboard();
 
-</script>
+      <button
+        class="primary-button"
+        onclick="copyReferral()"
+      >
+        📋 Copy Referral Link
+      </button>
 
-</body>
-  </html>
+
+      <button
+        class="secondary-button"
+        onclick="shareReferral()"
+      >
+        🚀 Invite Friends
+      </button>
+
+    </div>
+
+
+    <div class="section-title">
+      Your Referral Stats
+    </div>
+
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          👥
+        </div>
+
+        <div class="stat-label">
+          Referrals
+        </div>
+
+        <div
+          class="stat-value"
+          id="referralCount2"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          💰
+        </div>
+
+        <div class="stat-label">
+          Referral Earnings
+        </div>
+
+        <div
+          class="stat-value"
+          id="referralBalance2"
+        >
+          ₦0.00
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       WALLET
+  ========================= -->
+
+  <div
+    id="walletPage"
+    class="page"
+  >
+
+    <div class="topbar">
+
+      <div class="logo">
+        Wallet
+      </div>
+
+      <div
+        class="avatar"
+        onclick="showPage('homePage')"
+      >
+        🏠
+      </div>
+
+    </div>
+
+
+    <div class="balance-card">
+
+      <div class="balance-label">
+        Available Balance
+      </div>
+
+      <div
+        class="balance"
+        id="walletBalance"
+      >
+        ₦0.00
+      </div>
+
+      <button
+        class="primary-button"
+        onclick="showNotice('Withdrawal system will be connected next.')"
+      >
+        💸 Withdraw
+      </button>
+
+    </div>
+
+
+    <div class="section-title">
+      Transaction History
+    </div>
+
+
+    <div class="notice">
+      No transactions yet.
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       PROFILE
+  ========================= -->
+
+  <div
+    id="profilePage"
+    class="page"
+  >
+
+    <div class="topbar">
+
+      <div class="logo">
+        Profile
+      </div>
+
+      <div
+        class="avatar"
+        onclick="showPage('homePage')"
+      >
+        🏠
+      </div>
+
+    </div>
+
+
+    <div class="profile-card">
+
+      <div class="profile-row">
+
+        <div class="profile-label">
+          Name
+        </div>
+
+        <div
+          class="profile-value"
+          id="profileName"
+        >
+          User
+        </div>
+
+      </div>
+
+
+      <div class="profile-row">
+
+        <div class="profile-label">
+          Username
+        </div>
+
+        <div
+          class="profile-value"
+          id="profileUsername"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="profile-row">
+
+        <div class="profile-label">
+          Telegram ID
+        </div>
+
+        <div
+          class="profile-value"
+          id="profileId"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="profile-row">
+
+        <div class="profile-label">
+          XP
+        </div>
+
+        <div
+          class="profile-value"
+          id="profileXP"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="profile-row">
+
+        <div class="profile-label">
+          Level
+        </div>
+
+        <div
+          class="profile-value"
+          id="profileLevel"
+        >
+          1
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
+<div class="bottom-nav">
+
+
+  <div
+    class="nav-item active"
+    onclick="showPage('homePage')"
+  >
+
+    <span class="nav-icon">
+      🏠
+    </span>
+
+    Home
+
+  </div>
+
+
+  <div
+    class="nav-item"
+    onclick="showTasks()"
+  >
+
+    <span class="nav-icon">
+      🎯
+    </span>
+
+    Tasks
+
+  </div>
+
+
+  <div
+    class="nav-item"
+    onclick="showPage('promotionPage')"
+  >
+
+    <span class="nav-icon">
+      📢
+    </span>
+
+    Promote
+
+  </div>
+
+
+  <div
+    class="nav-item"
+    onclick="showPage('referralPage')"
+  >
+
+    <span class="nav-icon">
+      ?
