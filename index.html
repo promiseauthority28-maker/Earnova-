@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Promise Task</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#17202a}
+    .app{max-width:520px;margin:auto;padding:18px}
+    .hero{background:#111827;color:white;border-radius:22px;padding:22px;margin-bottom:16px}
+    .small{opacity:.75;font-size:13px}.balance{font-size:32px;font-weight:700;margin:8px 0 18px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .card{background:white;border-radius:18px;padding:18px;box-shadow:0 2px 10px #0000000d}
+    .icon{font-size:25px}.title{font-weight:700;margin-top:8px}.muted{color:#68707a;font-size:13px;margin-top:5px}
+    button{width:100%;border:0;border-radius:14px;padding:14px;font-size:15px;font-weight:700;background:#2563eb;color:white;margin-top:15px}
+    .section{margin:20px 0 10px;font-size:18px;font-weight:700}
+    #tgname{font-weight:700}
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="hero">
+    <div class="small">WELCOME</div>
+    <div id="tgname">Promise Task User</div>
+    <div class="small" style="margin-top:18px">Available Balance</div>
+    <div class="balance">₦0.00</div>
+    <button onclick="showNotice('Wallet will be connected after the backend is added.')">Open Wallet</button>
+  </div>
+
+  <div class="section">Quick Menu</div>
+  <div class="grid">
+    <div class="card" onclick="showNotice('Tasks module coming next.')"><div class="icon">📋</div><div class="title">Tasks</div><div class="muted">Available tasks</div></div>
+    <div class="card" onclick="showNotice('Plans module coming next.')"><div class="icon">⭐</div><div class="title">My Plan</div><div class="muted">Activation & plan</div></div>
+    <div class="card" onclick="showNotice('Referral module coming next.')"><div class="icon">👥</div><div class="title">Referrals</div><div class="muted">Invite & earn</div></div>
+    <div class="card" onclick="showNotice('Withdrawal module coming next.')"><div class="icon">💸</div><div class="title">Withdraw</div><div class="muted">Request payout</div></div>
+  </div>
+
+  <div class="section">Account</div>
+  <div class="card">
+    <div class="title">Telegram Account</div>
+    <div class="muted">This first version reads your Telegram profile when opened inside Telegram.</div>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+if (tg) {
+  tg.ready();
+  tg.expand();
+  const user = tg.initDataUnsafe?.user;
+  if (user) {
+    const name = [user.first_name, user.last_name].filter(Boolean).join(' ');
+    document.getElementById('tgname').textContent = name || ('@' + (user.username || 'User'));
+  }
+}
+function showNotice(message){
+  if (tg && tg.showAlert) tg.showAlert(message);
+  else alert(message);
+}
+</script>
+</body>
+</html>
